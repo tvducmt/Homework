@@ -12,7 +12,7 @@ import (
 	"github.com/robfig/cron"
 )
 
-type Match struct {
+type match struct {
 	Venue             string `json:"venue"`
 	Location          string `json:"location"`
 	Status            string `json:"status"`
@@ -25,11 +25,7 @@ type Match struct {
 	Winner            string `json:"winner"`
 }
 
-type Matchs struct {
-	Locs []Match `json:"match"`
-}
-
-func SendMail(matchcurrent string) {
+func sendMail(matchcurrent string) {
 	// Set up authentication information.
 	auth := smtp.PlainAuth("", "1510819@hcmut.edu.vn", "Password", "smtp.gmail.com")
 
@@ -58,15 +54,15 @@ func main() {
 		}
 		//responseString := string(responseData)
 
-		matchcurrent := Match{}
-		json.Unmarshal(responseData, &matchcurrent)
+		Matchcurrent := match{}
+		json.Unmarshal(responseData, &Matchcurrent)
 
 		c := cron.New()
 		c.AddFunc("1 * * * * *", func() {
-			if matchcurrent.Winner != "" {
-				fmt.Println(matchcurrent)
+			if Matchcurrent.Winner != "" {
+				fmt.Println(Matchcurrent)
 				responseString := string(responseData)
-				SendMail(responseString)
+				sendMail(responseString)
 			}
 
 		})
